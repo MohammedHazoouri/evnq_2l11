@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Wish Upon a Feeling</title>
+  <meta name="description" content="Whisper a wish to the night, send it up to the stars, and receive a tender little letter in return. A quiet, romantic place for your heart.">
+  <meta name="theme-color" content="#1a0b2e">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Fonts: a luxury serif + a clean sans. The site falls back gracefully if they cannot load. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#wish">Skip to the wish box</a>
+
+  <!-- Atmosphere: aurora glow + particle canvas -->
+  <div class="aurora" aria-hidden="true"></div>
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <!-- ============ HEADER / NAV ============ -->
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="Wish Upon a Feeling, back to top">
+      <span class="brand-star" aria-hidden="true">♡</span> Wish Upon a Feeling
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#wish">Make a Wish</a>
+      <a href="#meaning">Meaning</a>
+      <a href="#inspiration">Whispers</a>
+      <a href="#ritual">Ritual</a>
+      <a href="#final">Finally</a>
+    </nav>
+
+    <div class="header-tools">
+      <button class="icon-btn" id="soundToggle" type="button" aria-pressed="false" aria-label="Turn ambient sound on" title="Ambient sound (off)">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path class="s-wave" d="M4 10v4h3l4 3.5v-11L7 10H4z" fill="currentColor"/><path class="s-on" d="M15 9.5a3.5 3.5 0 0 1 0 5M17.5 7a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="s-off" d="M15 9.5l5 5M20 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO + WISH EXPERIENCE ============ -->
+    <section class="hero" id="wish" aria-labelledby="heroTitle">
+      <div class="hero-copy reveal">
+        <svg class="emblem" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+          <path class="emblem-heart" d="M32 54 C12 40 6 28 6 20 C6 12 12 7 19 7 C25 7 29 10 32 15 C35 10 39 7 45 7 C52 7 58 12 58 20 C58 28 52 40 32 54 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          <path class="emblem-spark s1" d="M50 6 v7 M46.5 9.5 h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          <path class="emblem-spark s2" d="M12 44 v5 M9.5 46.5 h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <p class="moon-chip" id="moonChip"></p>
+        <h1 id="heroTitle"><span class="h1-top">Whisper it softly,</span> <span class="script h1-script">the night is listening.</span></h1>
+        <p class="lede">Some wishes are too tender to say out loud. Write yours here, let it drift up among the stars, and let something gentle answer you back.</p>
+      </div>
+
+      <div class="wish-card glass reveal" id="wishCard">
+        <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span>
+        <span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+
+        <!-- Panel 1: the form -->
+        <form class="panel panel-form" id="wishForm" novalidate autocomplete="off">
+          <label class="field-label" for="wishInput">Your wish, in your own words</label>
+          <div class="starters" id="starters" role="group" aria-label="Need a place to begin? Tap one">
+            <button type="button" class="chip" data-text="I wish to be loved gently...">to be loved gently</button>
+            <button type="button" class="chip" data-text="I wish they would find their way back to me...">someone to come back</button>
+            <button type="button" class="chip" data-text="I wish my heart felt lighter...">a lighter heart</button>
+            <button type="button" class="chip" data-text="I wish for a love that stays...">a love that stays</button>
+          </div>
+          <div class="textarea-wrap">
+            <textarea id="wishInput" name="wish" rows="5" maxlength="500"
+              placeholder="Write the wish your heart has been holding onto..."
+              aria-describedby="wishCount wishError wishHint"></textarea>
+            <span class="glow-edge" aria-hidden="true"></span>
+          </div>
+
+          <div class="field-meta">
+            <p class="hint" id="wishHint">Keep it gentle: no passwords or personal details.</p>
+            <p class="counter" id="wishCount" aria-live="polite">0 / 500</p>
+          </div>
+          <p class="error" id="wishError" role="alert" hidden></p>
+
+          <!-- Honeypot: real people never see or fill this. Bots often do. -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <!-- Only shown when a Google Sheets endpoint is configured (see script.js) -->
+          <label class="consent" id="consentRow" hidden>
+            <input type="checkbox" id="consent">
+            <span>Privately save my wish to the keeper's notebook. <small>Optional. It is never shown publicly.</small></span>
+          </label>
+
+          <button class="btn-primary" id="submitBtn" type="submit">
+            <span class="btn-label">Release My Wish ♡</span>
+            <span class="btn-sheen" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <!-- Panel 2: the magical transformation -->
+        <div class="panel panel-loading" id="panelLoading" hidden aria-live="polite">
+          <div class="orb" aria-hidden="true"><span></span><span></span><span></span><svg class="orb-heart" viewBox="0 0 24 24" width="34" height="34"><path d="M12 21 C4 15 2 11 2 8 C2 5 4.2 3 6.8 3 C9 3 10.8 4.2 12 6.2 C13.2 4.2 15 3 17.2 3 C19.8 3 22 5 22 8 C22 11 20 15 12 21 Z" fill="currentColor"/></svg></div>
+          <p class="loading-text" id="loadingText">Holding your wish gently...</p>
+        </div>
+
+        <!-- Panel 3: the message -->
+        <div class="panel panel-result" id="panelResult" hidden>
+          <div class="seal" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M12 20 C5 14.5 3.4 11.3 3.4 8.6 C3.4 6 5.3 4.2 7.6 4.2 C9.5 4.2 11 5.2 12 6.9 C13 5.2 14.5 4.2 16.4 4.2 C18.7 4.2 20.6 6 20.6 8.6 C20.6 11.3 19 14.5 12 20 Z" fill="currentColor"/></svg>
+          </div>
+          <p class="eyebrow small">A letter from the stars</p>
+          <blockquote class="message" id="messageText" tabindex="-1" aria-live="polite"></blockquote>
+          <p class="signature script" aria-hidden="true">with love, the stars</p>
+          <p class="category" id="messageCategory"></p>
+          <p class="save-status" id="saveStatus" role="status" hidden></p>
+
+          <div class="actions">
+            <button class="btn-ghost" id="anotherMessage" type="button">Give Me Another Message</button>
+            <button class="btn-ghost" id="anotherWish" type="button">Make Another Wish</button>
+            <button class="btn-ghost" id="postcardBtn" type="button">Keep It as a Postcard</button>
+            <button class="btn-ghost" id="shareBtn" type="button">Share This Moment</button>
+          </div>
+          <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+          <p class="fine">Messages are gentle companions, not promises. What happens next is yours to write, and you are not writing it alone.</p>
+        </div>
+      </div>
+
+      <a class="scroll-hint" href="#meaning" aria-label="Scroll to learn more">
+        <span>Wander further</span><i aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <!-- ============ SECTION A: THE MEANING OF A WISH ============ -->
+    <section class="section meaning" id="meaning" aria-labelledby="meaningTitle">
+      <div class="container narrow">
+        <p class="eyebrow reveal">Why we wish</p>
+        <h2 id="meaningTitle" class="reveal">A wish is a love letter to the future</h2>
+        <div class="prose reveal">
+          <p>A wish is a small act of courage. It is the moment you admit, even only to yourself, that someone, something, some kind of tomorrow matters enough to want.</p>
+          <p>People have always looked up and whispered their hearts to the sky. Not because the sky could answer, but because saying a tender thing out loud makes it real enough to begin walking toward you.</p>
+          <p>A wish doesn't promise an outcome. It offers a direction. It tells you where your heart is already leaning, and that is worth knowing.</p>
+          <p class="pull script">Wanting is just love, waiting for its name.</p>
+        </div>
+        <div class="divider reveal" aria-hidden="true"><span>✦</span></div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION B: A LITTLE INSPIRATION ============ -->
+    <section class="section inspiration" id="inspiration" aria-labelledby="inspTitle">
+      <div class="container">
+        <p class="eyebrow reveal">Words to keep</p>
+        <h2 id="inspTitle" class="reveal">Whispers from the night</h2>
+        <div class="cards" id="quoteCards">
+          <!-- Quote cards are rendered from script.js so they are easy to edit -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION C: THE RITUAL ============ -->
+    <section class="section ritual" id="ritual" aria-labelledby="ritualTitle">
+      <div class="container">
+        <p class="eyebrow reveal">Three small steps</p>
+        <h2 id="ritualTitle" class="reveal">How to wish on a feeling</h2>
+        <ol class="steps">
+          <li class="step glass reveal">
+            <span class="step-num" aria-hidden="true">I</span>
+            <h3>Write your wish</h3>
+            <p>Find a quiet moment, maybe by candlelight. Put into words what your heart has been carrying. There is no wrong wish, and no one is reading over your shoulder.</p>
+          </li>
+          <li class="step glass reveal">
+            <span class="step-num" aria-hidden="true">II</span>
+            <h3>Let it rise to the stars</h3>
+            <p>Press the button and watch it rise as a small, glowing star. Some things grow lighter once they are no longer held so tightly.</p>
+          </li>
+          <li class="step glass reveal">
+            <span class="step-num" aria-hidden="true">III</span>
+            <h3>Open your letter</h3>
+            <p>A letter will find you, sealed with a little heart. Keep the words that feel like yours, even as a postcard, and leave the rest among the stars.</p>
+          </li>
+        </ol>
+        <p class="center reveal"><a class="btn-primary inline" href="#wish"><span class="btn-label">Make a wish ♡</span><span class="btn-sheen" aria-hidden="true"></span></a></p>
+      </div>
+    </section>
+
+    <!-- ============ SECTION D: A FINAL THOUGHT ============ -->
+    <section class="section final" id="final" aria-labelledby="finalTitle">
+      <div class="container narrow center">
+        <svg class="constellation reveal" viewBox="0 0 200 180" width="190" height="171" aria-hidden="true">
+          <path class="c-line" pathLength="1" d="M100 168 L36 104 L22 62 L44 30 L76 28 L100 56 L124 28 L156 30 L178 62 L164 104 Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+          <g class="c-stars" fill="currentColor">
+            <circle cx="100" cy="168" r="3.4"/><circle cx="36" cy="104" r="2.4"/><circle cx="22" cy="62" r="2.8"/><circle cx="44" cy="30" r="2.4"/>
+            <circle cx="76" cy="28" r="2.8"/><circle cx="100" cy="56" r="2.2"/><circle cx="124" cy="28" r="2.8"/><circle cx="156" cy="30" r="2.4"/>
+            <circle cx="178" cy="62" r="2.8"/><circle cx="164" cy="104" r="2.4"/>
+          </g>
+        </svg>
+        <p class="eyebrow reveal">Before you go</p>
+        <h2 id="finalTitle" class="reveal">Begin again, softly.</h2>
+        <div class="prose reveal">
+          <p>Hope is not loud. It is the quiet decision to keep the window open, to love again, to try once more, to believe that tomorrow might hold something kind, and someone kinder still.</p>
+          <p>Whatever you are carrying tonight, may it feel a little lighter. May love find you, and may you be gentle enough with yourself to let it in.</p>
+          <p class="signoff script">Every ending is only a doorway. Every morning, a new beginning.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER / PRIVACY ============ -->
+  <footer class="site-footer">
+    <div class="container narrow center">
+      <p class="brand-line"><span aria-hidden="true">♡</span> Wish Upon a Feeling</p>
+      <div class="privacy glass" id="privacy">
+        <h3>A note on privacy</h3>
+        <p>Your wish is yours. It is never shown publicly. By default it stays in your browser and is not stored anywhere. If the site's keeper has enabled the optional notebook, your wish is only saved if you tick the box, and only the wish text, time and a random ID are kept.</p>
+        <p>Please don't write passwords, ID numbers, financial details, or other sensitive private information.</p>
+      </div>
+      <p class="fine">Made with love, under the same sky as you.</p>
+    </div>
+  </footer>
+
+  <!--
+    GLOBAL FLOATING WATERMARK (Instagram)
+    script.js re-creates this automatically if it's missing, so it also appears on any future page
+    that loads script.js + styles.css.
+  -->
+  <a class="evnq-watermark" id="evnqWatermark"
+     href="https://www.instagram.com/invites/contact/?utm_content=10y5v4es&amp;srtk=2od0mn8c877b"
+     target="_blank" rel="noopener noreferrer"
+     aria-label="EvnQ on Instagram (opens in a new tab)">
+    <span class="wm-halo" aria-hidden="true"></span>
+    <img src="assets/logo.jpg" alt="EvnQ logo" width="64" height="64" decoding="async">
+    <span class="wm-tip" role="tooltip">Follow EvnQ on Instagram</span>
+  </a>
+
+  <noscript>
+    <p class="noscript">Wish Upon a Feeling needs JavaScript to reveal your message. Please enable it and come back.</p>
+  </noscript>
+
+  <script src="script.js"></script>
+</body>
+</html>
