@@ -29,7 +29,7 @@
    * Leave it as an empty string '' and the website works perfectly without saving anything.
    * No secrets belong here: this URL is public by nature. See README.md.
    */
-  var GOOGLE_SHEETS_ENDPOINT = '';
+  var GOOGLE_SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxC8VxCOffCZ_hDzm5ovtyuGLSLRoPfmGLcKdp1RwzPcwATKGjnDOcVeP6m9ME6VBk-/exec';
 
   /** Optional shared "site key" that must match SITE_KEY in google-apps-script.gs.
    *  This is NOT a secret (anyone can read it); it only filters out casual junk traffic. */
